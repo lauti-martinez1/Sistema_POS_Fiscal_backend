@@ -25,7 +25,7 @@ func main() {
 	// URL del frontend en Vercel
 	config.AllowOrigins = []string{
 		"http://localhost:5173",
-		"https://sistema-pos-fiscal.vercel.app",
+		"https://sistema-pos-fiscal.vercel.app/",
 	}
 
 	config.AllowMethods = []string{
