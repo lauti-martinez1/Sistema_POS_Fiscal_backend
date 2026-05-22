@@ -19,11 +19,28 @@ func main() {
 	// Crear servidor Gin
 	r := gin.Default()
 
-	// CONFIGURACIÓN CORS ABIERTA (La clave para que ande en Vercel)
+	// Configuración CORS
 	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true // Acepta cualquier URL, sin importar cuál te asigne Vercel
-	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization"}
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+
+	// URL del frontend en Vercel
+	config.AllowOrigins = []string{
+		"http://localhost:5173",
+		"https://sistema-pos-fiscal.vercel.app/",
+	}
+
+	config.AllowMethods = []string{
+		"GET",
+		"POST",
+		"PUT",
+		"DELETE",
+		"OPTIONS",
+	}
+
+	config.AllowHeaders = []string{
+		"Origin",
+		"Content-Type",
+		"Authorization",
+	}
 
 	r.Use(cors.New(config))
 
@@ -45,16 +62,16 @@ func main() {
 		api.GET("/sales", handlers.GetSales)
 		api.GET("/sales/:id", handlers.GetSale)
 
-		// Facturación
-		api.POST("/invoice", handlers.GenerateInvoice)
 	}
 
-	// PUERTO AUTOMÁTICO PARA RAILWAY
+	// Puerto dinámico para Railway
 	port := os.Getenv("PORT")
+
 	if port == "" {
 		port = "8080"
 	}
 
 	log.Println("Servidor corriendo en puerto:", port)
+
 	log.Fatal(r.Run(":" + port))
 }
